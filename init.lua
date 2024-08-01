@@ -377,6 +377,15 @@ require('lazy').setup({
         -- },
         -- pickers = {}
         defaults = {
+          --ripgrep_arguments = {
+          --  'rg',
+          --  '--hidden',
+          --  '--no-heading',
+          --  '--with-filename',
+          --  '--line-number',
+          --  '--column',
+          --  '--smart-case',
+          --},
           file_ignore_patterns = {
             'node%_modules/*',
             '.history/*',
