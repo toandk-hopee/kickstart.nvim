@@ -92,7 +92,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -239,16 +239,16 @@ require('lazy').setup({
   --
   -- Use `opts = {}` to force a plugin to be loaded.
   --
-  'vim-denops/denops.vim',
-  {
-    'lambdalisue/kensaku.vim',
-    {
-      'lambdalisue/kensaku-search.vim',
-      config = function()
-        vim.api.nvim_set_keymap('c', '<CR>', '<Plug>(kensaku-search-replace)<CR>', { noremap = true, silent = true })
-      end,
-    },
-  },
+  --  'vim-denops/denops.vim',
+  --  {
+  --    'lambdalisue/kensaku.vim',
+  --    {
+  --      'lambdalisue/kensaku-search.vim',
+  --      config = function()
+  --        vim.api.nvim_set_keymap('c', '<CR>', '<Plug>(kensaku-search-replace)<CR>', { noremap = true, silent = true })
+  --      end,
+  --    },
+  --  },
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
   --    require('gitsigns').setup({ ... })
@@ -266,7 +266,19 @@ require('lazy').setup({
       },
     },
   },
-
+  --  {
+  --    'gbprod/phpactor.nvim',
+  --    build = function()
+  --      require 'phpactor.handler.update'()
+  --    end,
+  --    dependencies = {
+  --      'nvim-lua/plenary.nvim',
+  --      'neovim/nvim-lspconfig',
+  --    },
+  --    opts = {
+  --      -- you're options coes here
+  --    },
+  --  },
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
@@ -364,6 +376,14 @@ require('lazy').setup({
         --   },
         -- },
         -- pickers = {}
+        defaults = {
+          file_ignore_patterns = {
+            'node%_modules/*',
+            '.history/*',
+            'storage/framework/*',
+            'storage/debugbar/*',
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -444,6 +464,18 @@ require('lazy').setup({
       'hrsh7th/cmp-nvim-lsp',
     },
     config = function()
+      require('lspconfig').phpactor.setup {
+        root_dir = function(_)
+          return vim.loop.cwd()
+        end,
+        init_options = {
+          ['language_server.diagnostics_on_update'] = false,
+          ['language_server.diagnostics_on_open'] = false,
+          ['language_server.diagnostics_on_save'] = false,
+          ['language_server_phpstan.enabled'] = false,
+          ['language_server_psalm.enabled'] = false,
+        },
+      }
       -- Brief aside: **What is LSP?**
       --
       -- LSP is an initialism you've probably heard, but might not understand what it is.
@@ -924,12 +956,12 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.indent_line',
+  require 'kickstart.plugins.lint',
+  require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
