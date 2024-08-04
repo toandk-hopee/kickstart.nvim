@@ -37,6 +37,9 @@ return {
         },
       },
       buffers = { follow_current_file = { enable = true } },
+      window = {
+        width = 25,
+      },
     }
   end,
 }
