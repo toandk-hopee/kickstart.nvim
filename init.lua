@@ -7,6 +7,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+vim.g.loaded_matchparen = 1
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 vim.cmd "let g:node_host_prog='~/.nvm/versions/node/v18.20.4/lib/node_modules/'"
@@ -178,6 +179,16 @@ require('lazy').setup({
   --
   -- Use `opts = {}` to force a plugin to be loaded.
   --
+  {
+    'supermaven-inc/supermaven-nvim',
+    config = function()
+      -- only run setup if the current folder has .supermaven
+      local current_dir = vim.fn.getcwd()
+      if vim.fn.filereadable(current_dir .. '/.supermaven') == 1 then
+        require('supermaven-nvim').setup {}
+      end
+    end,
+  },
   'vim-denops/denops.vim',
   {
     'lambdalisue/kensaku.vim',
@@ -302,15 +313,15 @@ require('lazy').setup({
         -- },
         -- pickers = {}
         defaults = {
-          --ripgrep_arguments = {
-          --  'rg',
-          --  '--hidden',
-          --  '--no-heading',
-          --  '--with-filename',
-          --  '--line-number',
-          --  '--column',
-          --  '--smart-case',
-          --},
+          ripgrep_arguments = {
+            'rg',
+            '--hidden',
+            '--no-heading',
+            '--with-filename',
+            '--line-number',
+            '--column',
+            '--smart-case',
+          },
           file_ignore_patterns = {
             'node%_modules/*',
             '.history/*',
@@ -398,18 +409,18 @@ require('lazy').setup({
       'hrsh7th/cmp-nvim-lsp',
     },
     config = function()
-      require('lspconfig').phpactor.setup {
-        root_dir = function(_)
-          return vim.loop.cwd()
-        end,
-        init_options = {
-          ['language_server.diagnostics_on_update'] = false,
-          ['language_server.diagnostics_on_open'] = false,
-          ['language_server.diagnostics_on_save'] = false,
-          ['language_server_phpstan.enabled'] = false,
-          ['language_server_psalm.enabled'] = false,
-        },
-      }
+      --require('lspconfig').phpactor.setup {
+      --  root_dir = function(_)
+      --    return vim.loop.cwd()
+      --  end,
+      --  init_options = {
+      --    ['language_server.diagnostics_on_update'] = false,
+      --    ['language_server.diagnostics_on_open'] = false,
+      --    ['language_server.diagnostics_on_save'] = false,
+      --    ['language_server_phpstan.enabled'] = false,
+      --    ['language_server_psalm.enabled'] = false,
+      --  },
+      --}
 
       require('lspconfig').gopls.setup {
         root_dir = function(_)
@@ -531,7 +542,7 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
-        -- tsserver = {},
+        --tsserver = {},
         --
 
         lua_ls = {
@@ -598,6 +609,18 @@ require('lazy').setup({
     },
     opts = {
       notify_on_error = false,
+      -- formatters = {
+      --   php = {
+      --     command = 'php-cs-fixer',
+      --     args = {
+      --       'fix',
+      --       '$FILENAME',
+      --       '--config=/your/path/to/config/file/[filename].php',
+      --       '--allow-risky=yes', -- if you have risky stuff in config, if not you dont need it.
+      --     },
+      --     stdin = false,
+      --   },
+      -- },
       format_on_save = function(bufnr)
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
@@ -609,6 +632,7 @@ require('lazy').setup({
         }
       end,
       formatters_by_ft = {
+        -- php = { 'php' },
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
@@ -722,6 +746,7 @@ require('lazy').setup({
           --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
         },
         sources = {
+          --    { name = 'supermaven' },
           {
             name = 'lazydev',
             -- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
