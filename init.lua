@@ -11,6 +11,7 @@ vim.g.loaded_matchparen = 1
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 vim.cmd "let g:node_host_prog='~/.nvm/versions/node/v18.20.4/lib/node_modules/'"
+vim.diagnostic.config { virtual_text = false }
 --vim.g.python3_host_prog = 'C:\\Users\\asus\\.pyenv\\pyenv-win\\versions\\3.12.4\\python.exe'
 --
 --vim.o.shell = 'pwsh.exe'
@@ -746,7 +747,7 @@ require('lazy').setup({
           --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
         },
         sources = {
-          --    { name = 'supermaven' },
+          { name = 'supermaven' },
           {
             name = 'lazydev',
             -- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
