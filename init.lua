@@ -58,6 +58,14 @@ function _G.set_terminal_keymaps()
 end
 -- if you only want these mappings for toggle term use term://*toggleterm#* instead
 vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'
+
+function insertFullPath()
+  local filepath = vim.fn.expand '%'
+  vim.fn.setreg('+', filepath) -- write to clippoard
+end
+
+vim.keymap.set('n', '<leader>cp', insertFullPath, { noremap = true, silent = true, desc = '[C]opy File [P]ath' })
+
 -- [[ setting options ]]
 -- see `:help vim.opt`
 -- note: you can change these options as you wish!
@@ -193,11 +201,6 @@ vim.opt.rtp:prepend(lazypath)
 --
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup {
-  require 'custom.plugins.lsp',
-  require 'custom.plugins.telescope',
-  require 'custom.plugins.tree-sitter',
-  require 'custom.plugins.format',
-  require 'custom.plugins.toggleterm',
   -- {
   --   'stevearc/aerial.nvim',
   --   config = function()
@@ -253,19 +256,16 @@ require('lazy').setup {
   {
     'noatdk/fileline.nvim',
     config = function()
-      local fileline = require 'fileline'
-      local ui = require 'toggleterm.ui'
-      vim.keymap.set('n', 'gtl', function()
-        -- if the current buffer is a toggleterm, toggle it
+      vim.keymap.set('n', 'gl', function()
         if vim.bo.filetype == 'toggleterm' then
           local line = vim.api.nvim_get_current_line()
-          ui.goto_previous()
-          fileline.gotoline_at_cursor(true, line)
+          require('toggleterm.ui').goto_previous()
+          require('fileline').gotoline_at_cursor(true, line)
           return
         end
 
-        fileline.gotoline_at_cursor(true)
-      end, { desc = '[G]o [T]o [L]ine' })
+        require('fileline').gotoline_at_cursor(true)
+      end, { desc = '[G]o to [L]ine' })
     end,
   },
   -- {
@@ -446,6 +446,11 @@ require('lazy').setup {
   require 'custom.plugins.indent_line',
   require 'custom.plugins.lint',
   require 'custom.plugins.autopairs',
+  require 'custom.plugins.lsp',
+  require 'custom.plugins.telescope',
+  require 'custom.plugins.tree-sitter',
+  require 'custom.plugins.format',
+  require 'custom.plugins.toggleterm',
   -- require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 }
