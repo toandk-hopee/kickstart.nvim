@@ -11,6 +11,7 @@ vim.g.loaded_matchparen = 1
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 vim.cmd "let g:node_host_prog='~/.nvm/versions/node/v18.20.4/lib/node_modules/'"
+
 vim.diagnostic.config { virtual_text = false }
 if vim.fn.has 'wsl' == 1 then
   vim.g.clipboard = {
@@ -186,8 +187,17 @@ require('lazy').setup({
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
+  -- {
+  --   'christoomey/vim-tmux-navigator',
+  --   lazy = false,
+  -- },
   'skywind3000/asyncrun.vim',
-
+  {
+    'mg979/vim-visual-multi',
+    config = function()
+      --      vim.g.VM_leader = "|"
+    end,
+  },
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
   -- keys can be used to configure plugin behavior/loading/etc.
@@ -790,6 +800,13 @@ require('lazy').setup({
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
     end,
+    opts = {
+      transparent = true,
+      styles = {
+        sidebars = 'transparent',
+        floats = 'transparent',
+      },
+    },
   },
 
   -- Highlight todo, notes, etc in comments
