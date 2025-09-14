@@ -21,7 +21,8 @@ vim.opt.foldlevel = 20
 vim.loader.enable()
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
-vim.cmd "let g:node_host_prog='~/.nvm/versions/node/v18.20.4/lib/node_modules/'"
+vim.g.node_host_prog = '~/.nvm/versions/node/v18.20.4/lib/node_modules/'
+-- vim.cmd "let g:node_host_prog='~/.nvm/versions/node/v18.20.4/lib/node_modules/'"
 
 if vim.fn.has 'wsl' == 1 then
   vim.g.clipboard = {
@@ -201,22 +202,6 @@ vim.opt.rtp:prepend(lazypath)
 --
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup {
-  -- {
-  --   'stevearc/aerial.nvim',
-  --   config = function()
-  --     require('aerial').setup {
-  --       -- optionally use on_attach to set keymaps when aerial has attached to a buffer
-  --       on_attach = function(bufnr)
-  --         -- Jump forwards/backwards with '{' and '}'
-  --         vim.keymap.set('n', '<S-TAB>', '<cmd>AerialPrev<CR>', { buffer = bufnr })
-  --         vim.keymap.set('n', '<TAB>', '<cmd>AerialNext<CR>', { buffer = bufnr })
-  --       end,
-  --     }
-  --     -- You probably also want to set a keymap to toggle aerial
-  --     vim.keymap.set('n', '<leader>o', '<cmd>AerialToggle!<CR>', { desc = 'Toggle [O]utlines' })
-  --   end,
-  -- },
-
   {
     'klen/nvim-config-local',
     config = function()
@@ -236,23 +221,23 @@ require('lazy').setup {
       }
     end,
   },
-  {
-    'pechorin/any-jump.vim',
-  },
-  {
-    'romus204/referencer.nvim',
-    config = function()
-      require('referencer').setup {
-        format = '%d',
-        pattern = {
-          '*.go',
-        },
-      }
-    end,
-  },
+  -- {
+  --   'pechorin/any-jump.vim',
+  -- },
+  -- {
+  --   'romus204/referencer.nvim',
+  --   config = function()
+  --     require('referencer').setup {
+  --       format = '%d',
+  --       pattern = {
+  --         '*.go',
+  --       },
+  --     }
+  --   end,
+  -- },
   { 'tpope/vim-sleuth' }, -- Detect tabstop and shiftwidth automatically
-  { 'tpope/vim-fugitive' },
-  { 'tpope/vim-rhubarb' },
+  -- { 'tpope/vim-fugitive' },
+  -- { 'tpope/vim-rhubarb' },
   {
     'noatdk/fileline.nvim',
     config = function()
@@ -302,7 +287,7 @@ require('lazy').setup {
       })
     end,
   },
-  { 'skywind3000/asyncrun.vim' },
+  -- { 'skywind3000/asyncrun.vim' },
   {
     'mg979/vim-visual-multi',
     config = function()
@@ -320,19 +305,20 @@ require('lazy').setup {
   --   },
   --   config = true,
   -- },
-  {
-    'supermaven-inc/supermaven-nvim',
-    opts = {
-      keymaps = {
-        accept_suggestion = nil, -- handled by nvim-cmp / blink.cmp
-      },
-      disable_inline_completion = vim.g.ai_cmp,
-      ignore_filetypes = { 'bigfile', 'snacks_input', 'snacks_notif' },
-      condition = function()
-        return vim.g.supermaven ~= true
-      end,
-    },
-  },
+  -- {
+  --   'supermaven-inc/supermaven-nvim',
+  --   lazy = true,
+  --   opts = {
+  --     keymaps = {
+  --       accept_suggestion = nil, -- handled by nvim-cmp / blink.cmp
+  --     },
+  --     disable_inline_completion = vim.g.ai_cmp,
+  --     ignore_filetypes = { 'bigfile', 'snacks_input', 'snacks_notif' },
+  --     condition = function()
+  --       return vim.g.supermaven ~= true
+  --     end,
+  --   },
+  -- },
   -- { 'Civitasv/cmake-tools.nvim', opts = {} },
   { 'vim-denops/denops.vim' },
   {
@@ -362,14 +348,12 @@ require('lazy').setup {
       }
     end,
   },
-  { 'folke/tokyonight.nvim' },
+  -- { 'folke/tokyonight.nvim' },
   {
     -- 'flazz/vim-colorschemes',
     'cseelus/vim-colors-clearance',
     init = function()
       vim.cmd.colorscheme 'clearance'
-
-      vim.cmd.hi 'Comment gui=none'
     end,
     -- opts = {
     --   transparent = true,
@@ -379,12 +363,12 @@ require('lazy').setup {
     --   },
     -- },
   },
-  {
-    'morhetz/gruvbox',
-  },
+  -- {
+  --   'morhetz/gruvbox',
+  -- },
 
   -- Highlight todo, notes, etc in comments
-  { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
+  -- { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
@@ -418,6 +402,7 @@ require('lazy').setup {
       end
     end,
   },
+  { 'j-hui/fidget.nvim', opts = {} },
   {
     'stevearc/oil.nvim',
     ---@module 'oil'
@@ -442,7 +427,8 @@ require('lazy').setup {
     -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
     lazy = false,
   },
-  require 'custom.plugins.debug',
+
+  -- require 'custom.plugins.debug',
   require 'custom.plugins.indent_line',
   require 'custom.plugins.lint',
   require 'custom.plugins.autopairs',
