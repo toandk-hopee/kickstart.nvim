@@ -244,17 +244,14 @@ require('lazy').setup {
     'noatdk/fileline.nvim',
     config = function()
       local fileline = require 'fileline'
-      local toggleterm = require 'toggleterm.terminal'
+      local ui = require 'toggleterm.ui'
       vim.keymap.set('n', 'gtl', function()
         -- if the current buffer is a toggleterm, toggle it
         if vim.bo.filetype == 'toggleterm' then
           local line = vim.api.nvim_get_current_line()
-          local term = toggleterm.get(vim.b.toggle_number, true)
-          if term ~= nil then
-            term:toggle()
-            fileline.gotoline_at_cursor(true, line)
-            return
-          end
+          ui.goto_previous()
+          fileline.gotoline_at_cursor(true, line)
+          return
         end
 
         fileline.gotoline_at_cursor(true)
