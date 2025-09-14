@@ -57,13 +57,33 @@ return {
 
       -- You can provide additional configuration to the handlers,
       -- see mason-nvim-dap README for more information
-      handlers = {},
+      handlers = {
+        --        function(config)
+        --          require('mason-nvim-dap').default_setup(config)
+        --        end,
+        --        php = function(config)
+        --          config.configurations = {
+        --            {
+        --              type = 'php',
+        --              request = 'launch',
+        --              name = 'Listen for XDebug',
+        --              port = 9123,
+        --              pathMappings = {
+        --                ['/upgraded'] = vim.fn.getcwd() .. '/',
+        --              },
+        --            },
+        --          }
+        --
+        --          require('mason-nvim-dap').default_setup(config) -- don't forget this!
+        --        end,
+      },
 
       -- You'll need to check that you have the required things installed
       -- online, please don't ask me how to install them :)
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
         'delve',
+        'php-debug-adapter',
       },
     }
 
@@ -92,6 +112,33 @@ return {
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
+    dap.adapters.php = {
+      type = 'executable',
+      command = 'node',
+      args = { '/Users/hopee/Documents/Kanyuweb/vscode-php-debug/out/phpDebug.js' },
+    }
+    dap.configurations.php = {
+      {
+        name = 'PHP: Listen to Xdebug',
+        port = '9123',
+        request = 'launch',
+        type = 'php',
+        pathMappings = {
+          ['/upgraded/'] = '${workspaceFolder}',
+        },
+        --serverSourceRoot = '/upgraded/',
+        --        localSourceRoot = '~/Documents/Kanyuweb/upgraded/',
+        --breakpoints = {
+        --          exception = {
+        --            Notice = false,
+        --            Warning = false,
+        --            Error = false,
+        --            Exception = false,
+        --            ['*'] = false,
+        --          },
+        --        },
+      },
+    }
 
     -- Install golang specific config
     require('dap-go').setup {
