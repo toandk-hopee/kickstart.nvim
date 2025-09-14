@@ -1,4 +1,4 @@
-vim.cmd 'lang en_US.UTF-8'
+vim.cmd 'lang ja_JP.UTF-8'
 
 -- Set <space> as the leader key
 -- See `:help mapleader`
@@ -8,8 +8,27 @@ vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
-
 vim.g.python3_host_prog = 'C:\\Users\\asus\\.pyenv\\pyenv-win\\versions\\3.12.4\\python.exe'
+
+vim.o.shell = 'pwsh.exe'
+
+vim.cmd "let &shell = executable('pwsh') ? 'pwsh' : 'powershell'"
+vim.cmd [[let &shellcmdflag = '-NoLogo -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.UTF8Encoding]::new();$PSDefaultParameterValues[''Out-File:Encoding'']=''utf8'';Remove-Alias -Force -ErrorAction SilentlyContinue tee;']]
+vim.cmd [[let &shellredir = '2>&1 | %%{ "$_" } | Out-File %s; exit $LastExitCode']]
+vim.cmd [[let &shellpipe  = '2>&1 | %%{ "$_" } | tee %s; exit $LastExitCode']]
+vim.cmd 'set shellquote= shellxquote='
+function _G.set_terminal_keymaps()
+  local opts = { buffer = 0 }
+  vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
+  vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts)
+  vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
+  vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
+  vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
+  vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
+  vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
+end
+-- if you only want these mappings for toggle term use term://*toggleterm#* instead
+-- vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
 -- [[ setting options ]]
 -- see `:help vim.opt`
 -- note: you can change these options as you wish!
@@ -149,6 +168,7 @@ require('lazy').setup({
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
+  'skywind3000/asyncrun.vim',
   -- 'anuvyklack/hydra.nvim',
 
   -- 'jay-babu/mason-nvim-dap.nvim',
@@ -175,13 +195,30 @@ require('lazy').setup({
       end,
     },
   },
-  'MunifTanjim/nui.nvim',
   {
-    'VonHeikemen/fine-cmdline.nvim',
-    config = function()
-      vim.api.nvim_set_keymap('n', '<CR>', '<cmd>FineCmdline<CR>', { noremap = true })
-    end,
+    -- amongst your other plugins
+    {
+      'akinsho/toggleterm.nvim',
+      version = '*',
+      config = function()
+        require('toggleterm').setup {
+          open_mapping = { [[<c-\>]], [[<c-¥>]] },
+        }
+      end,
+    },
   },
+  --  'MunifTanjim/nui.nvim',
+  --  {
+  --    'VonHeikemen/fine-cmdline.nvim',
+  --    config = function()
+  --      require('fine-cmdline').setup {
+  --        cmdline = {
+  --          prompt = ':',
+  --        },
+  --      }
+  --      vim.api.nvim_set_keymap('n', '<CR>', '<cmd>FineCmdline<CR>AsyncRun ', { noremap = true })
+  --    end,
+  --  },
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
   --    require('gitsigns').setup({ ... })
