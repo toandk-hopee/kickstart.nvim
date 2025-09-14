@@ -314,10 +314,17 @@ require('lazy').setup {
     'supermaven-inc/supermaven-nvim',
     config = function()
       -- only run setup if the current folder has .supermaven
-      local current_dir = vim.fn.getcwd()
-      if vim.fn.filereadable(current_dir .. '/.supermaven') == 1 then
-        require('supermaven-nvim').setup {}
-      end
+      require('supermaven-nvim').setup {
+        keymaps = {
+          accept_suggestion = '<C-j>',
+          clear_suggestion = '<C-]>',
+          accept_word = '<C-\\>',
+        },
+        condition = function()
+          vim.notify(vim.inspect(vim.g.supermaven))
+          return vim.g.supermaven ~= true
+        end,
+      }
     end,
   },
   -- { 'Civitasv/cmake-tools.nvim', opts = {} },
