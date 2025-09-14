@@ -16,7 +16,6 @@ vim.loader.enable()
 vim.g.have_nerd_font = true
 vim.cmd "let g:node_host_prog='~/.nvm/versions/node/v18.20.4/lib/node_modules/'"
 
-vim.diagnostic.config { virtual_text = false }
 if vim.fn.has 'wsl' == 1 then
   vim.g.clipboard = {
     name = 'win32yank-wsl',
@@ -125,6 +124,11 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+
+-- toggle diagnostic virtual text keymap
+vim.keymap.set('n', '<leader>td', function()
+  vim.diagnostic.config { virtual_text = not vim.diagnostic.config().virtual_text }
+end, { desc = '[T]oggle [D]iagnostic Virtual Text' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
