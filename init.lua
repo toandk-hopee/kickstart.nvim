@@ -191,19 +191,39 @@ require('lazy').setup {
   require 'kickstart.plugins.tree-sitter',
   require 'kickstart.plugins.format',
   require 'kickstart.plugins.toggleterm',
+  -- {
+  --   'stevearc/aerial.nvim',
+  --   config = function()
+  --     require('aerial').setup {
+  --       -- optionally use on_attach to set keymaps when aerial has attached to a buffer
+  --       on_attach = function(bufnr)
+  --         -- Jump forwards/backwards with '{' and '}'
+  --         vim.keymap.set('n', '<S-TAB>', '<cmd>AerialPrev<CR>', { buffer = bufnr })
+  --         vim.keymap.set('n', '<TAB>', '<cmd>AerialNext<CR>', { buffer = bufnr })
+  --       end,
+  --     }
+  --     -- You probably also want to set a keymap to toggle aerial
+  --     vim.keymap.set('n', '<leader>o', '<cmd>AerialToggle!<CR>', { desc = 'Toggle [O]utlines' })
+  --   end,
+  -- },
+
   {
-    'stevearc/aerial.nvim',
+    'klen/nvim-config-local',
     config = function()
-      require('aerial').setup {
-        -- optionally use on_attach to set keymaps when aerial has attached to a buffer
-        on_attach = function(bufnr)
-          -- Jump forwards/backwards with '{' and '}'
-          vim.keymap.set('n', '<S-TAB>', '<cmd>AerialPrev<CR>', { buffer = bufnr })
-          vim.keymap.set('n', '<TAB>', '<cmd>AerialNext<CR>', { buffer = bufnr })
-        end,
+      require('config-local').setup {
+        -- Default options (optional)
+
+        -- Config file patterns to load (lua supported)
+        config_files = { '.nvim.lua', '.nvimrc', '.exrc' },
+
+        -- Where the plugin keeps files data
+        hashfile = vim.fn.stdpath 'data' .. '/config-local',
+
+        autocommands_create = true, -- Create autocommands (VimEnter, DirectoryChanged)
+        commands_create = true, -- Create commands (ConfigLocalSource, ConfigLocalEdit, ConfigLocalTrust, ConfigLocalDeny)
+        silent = false, -- Disable plugin messages (Config loaded/denied)
+        lookup_parents = false, -- Lookup config files in parent directories
       }
-      -- You probably also want to set a keymap to toggle aerial
-      vim.keymap.set('n', '<leader>o', '<cmd>AerialToggle!<CR>', { desc = 'Toggle [O]utlines' })
     end,
   },
   {
@@ -224,7 +244,19 @@ require('lazy').setup {
     'noatdk/fileline.nvim',
     config = function()
       local fileline = require 'fileline'
+      local toggleterm = require 'toggleterm.terminal'
       vim.keymap.set('n', 'gtl', function()
+        -- if the current buffer is a toggleterm, toggle it
+        if vim.bo.filetype == 'toggleterm' then
+          local line = vim.api.nvim_get_current_line()
+          local term = toggleterm.get(vim.b.toggle_number, true)
+          if term ~= nil then
+            term:toggle()
+            fileline.gotoline_at_cursor(true, line)
+            return
+          end
+        end
+
         fileline.gotoline_at_cursor(true)
       end, { desc = '[G]o [T]o [L]ine' })
     end,
@@ -336,6 +368,9 @@ require('lazy').setup {
     --     floats = 'transparent',
     --   },
     -- },
+  },
+  {
+    'morhetz/gruvbox',
   },
 
   -- Highlight todo, notes, etc in comments
