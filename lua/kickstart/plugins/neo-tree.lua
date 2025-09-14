@@ -40,7 +40,7 @@ return {
       window = {
         width = 25,
       },
-      lazy = false,
+      lazy = true,
     }
   end,
   init = function()
