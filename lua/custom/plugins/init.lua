@@ -3,12 +3,12 @@
 --
 -- See the kickstart.nvim README for more information
 return {
-  {
-    'lambdalisue/vim-kensaku-search',
-    cmd = 'VKen',
-    keys = { { 'vkensaku', ':cnoremap <cr>(kensaku-search-replace)<cr>', desc = 'Japanese search with romaji' } },
-    opts = {},
-  },
+  --  {
+  --    'lambdalisue/vim-kensaku-search',
+  --    cmd = 'VKen',
+  --    keys = { { 'vkensaku', ':cnoremap <cr>(kensaku-search-replace)<cr>', desc = 'Japanese search with romaji' } },
+  --    opts = {},
+  --  },
   {
     'kdheepak/lazygit.nvim',
     cmd = {
