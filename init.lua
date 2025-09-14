@@ -186,6 +186,32 @@ require('lazy').setup {
   require 'kickstart.plugins.telescope',
   require 'kickstart.plugins.tree-sitter',
   require 'kickstart.plugins.format',
+  {
+    'stevearc/aerial.nvim',
+    config = function()
+      require('aerial').setup {
+        -- optionally use on_attach to set keymaps when aerial has attached to a buffer
+        on_attach = function(bufnr)
+          -- Jump forwards/backwards with '{' and '}'
+          vim.keymap.set('n', '<S-TAB>', '<cmd>AerialPrev<CR>', { buffer = bufnr })
+          vim.keymap.set('n', '<TAB>', '<cmd>AerialNext<CR>', { buffer = bufnr })
+        end,
+      }
+      -- You probably also want to set a keymap to toggle aerial
+      vim.keymap.set('n', '<leader>o', '<cmd>AerialToggle!<CR>', { desc = 'Toggle [O]utlines' })
+    end,
+  },
+  {
+    'romus204/referencer.nvim',
+    config = function()
+      require('referencer').setup {
+        format = '%d',
+        pattern = {
+          '*.go',
+        },
+      }
+    end,
+  },
   { 'tpope/vim-sleuth' }, -- Detect tabstop and shiftwidth automatically
   { 'tpope/vim-fugitive' },
   { 'tpope/vim-rhubarb' },
@@ -344,8 +370,11 @@ require('lazy').setup {
       },
       view_options = {
         show_hidden = true,
-        is_always_hidden = function(name, bufnr)
-          return name == '.DS_Store'
+        is_always_hidden = function(name, _)
+          local ignored = {
+            '.DS_Store',
+          }
+          return vim.tbl_contains(ignored, name)
         end,
       },
     },

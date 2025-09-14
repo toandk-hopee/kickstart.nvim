@@ -124,6 +124,50 @@ return {
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
             end, '[T]oggle Inlay [H]ints')
           end
+
+          map('<leader>tp', function()
+            local fidget = require 'fidget'
+            local file = vim.api.nvim_buf_get_name(0)
+            local state = 'ON'
+            if file:find '.go$' then
+              local client = vim.lsp.get_active_clients { name = 'gopls' }
+              if type(next(client)) == 'nil' then
+                fidget.notify 'gopls is not active'
+                return
+              end
+              local settings = client[1].config.settings
+              local current = settings['gopls']['ui.completion.usePlaceholders']
+              settings['gopls']['ui.completion.usePlaceholders'] = not current
+              if current then
+                state = 'OFF'
+              end
+              vim.lsp.buf_notify(0, 'workspace/didChangeConfiguration', { settings = settings })
+            elseif file:find '.c$' then
+              local client = vim.lsp.get_active_clients { name = 'clangd' }
+              if type(next(client)) == 'nil' then
+                fidget.notify 'clangd is not active'
+                return
+              end
+              local cmd = client[1].config.cmd
+              local current = false
+              for i, v in ipairs(cmd) do
+                fidget.notify(v)
+                if v == '--function-arg-placeholders=false' then
+                  fidget.notify 'found it'
+                  table.remove(cmd, i)
+                  current = true
+                  break
+                end
+              end
+              if not current then
+                table.insert(cmd, '--function-arg-placeholders=false')
+                state = 'OFF'
+              end
+
+              vim.lsp.buf_notify(0, 'workspace/didChangeConfiguration', { cmd = cmd })
+            end
+            fidget.notify('Toggled placeholders ' .. state)
+          end, '[T]oggle [P]laceholders')
         end,
       })
 
