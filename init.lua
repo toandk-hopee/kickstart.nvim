@@ -51,7 +51,7 @@ function _G.set_terminal_keymaps()
   vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
 end
 -- if you only want these mappings for toggle term use term://*toggleterm#* instead
--- vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
+vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'
 -- [[ setting options ]]
 -- see `:help vim.opt`
 -- note: you can change these options as you wish!
@@ -186,6 +186,7 @@ require('lazy').setup {
   require 'kickstart.plugins.telescope',
   require 'kickstart.plugins.tree-sitter',
   require 'kickstart.plugins.format',
+  require 'kickstart.plugins.toggleterm',
   {
     'stevearc/aerial.nvim',
     config = function()
@@ -278,16 +279,6 @@ require('lazy').setup {
         vim.api.nvim_set_keymap('c', '<CR>', '<Plug>(kensaku-search-replace)<CR>', { noremap = true, silent = true })
       end,
     },
-  },
-  {
-    'akinsho/toggleterm.nvim',
-    version = '*',
-    config = function()
-      require('toggleterm').setup {
-        lazy = true,
-        open_mapping = { [[<c-t>]], [[<c-¥>]] },
-      }
-    end,
   },
   {
     'folke/which-key.nvim',
