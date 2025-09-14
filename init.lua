@@ -55,7 +55,7 @@ vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'
 -- [[ setting options ]]
 -- see `:help vim.opt`
 -- note: you can change these options as you wish!
---  for more options, you can see `:help option-list`
+--  for more options, you can see `:help option-list
 
 -- Make line numbers default
 vim.opt.number = true
@@ -238,7 +238,25 @@ require('lazy').setup {
     -- version = '*', -- latest stable version, may have breaking changes if major version changed
     version = '^6.0.0', -- pin major version, include fixes and features that do not have breaking changes
     config = function()
-      require('kitty-scrollback').setup()
+      require('kitty-scrollback').setup {
+        {
+          status_window = {
+            enabled = false,
+          },
+          restore_options = true,
+        },
+      }
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = 'kitty-scrollback',
+        callback = function()
+          vim.schedule(function()
+            vim.keymap.set('n', '<CR>', function()
+              local fileline = require 'fileline'
+              fileline.gotoline_at_cursor(true)
+            end)
+          end)
+        end,
+      })
     end,
   },
   { 'skywind3000/asyncrun.vim' },
