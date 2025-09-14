@@ -12,6 +12,20 @@ vim.g.loaded_matchparen = 1
 vim.g.have_nerd_font = true
 vim.cmd "let g:node_host_prog='~/.nvm/versions/node/v18.20.4/lib/node_modules/'"
 vim.diagnostic.config { virtual_text = false }
+if vim.fn.has 'wsl' == 1 then
+  vim.g.clipboard = {
+    name = 'win32yank-wsl',
+    copy = {
+      ['+'] = 'win32yank.exe -i --crlf',
+      ['*'] = 'win32yank.exe -i --crlf',
+    },
+    paste = {
+      ['+'] = 'win32yank.exe -o --lf',
+      ['*'] = 'win32yank.exe -o --lf',
+    },
+    cache_enabled = true,
+  }
+end
 --vim.g.python3_host_prog = 'C:\\Users\\asus\\.pyenv\\pyenv-win\\versions\\3.12.4\\python.exe'
 --
 --vim.o.shell = 'pwsh.exe'
@@ -221,7 +235,6 @@ require('lazy').setup({
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
-      lazy = true,
       signs = {
         add = { text = '+' },
         change = { text = '~' },
