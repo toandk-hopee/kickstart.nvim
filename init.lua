@@ -1,22 +1,24 @@
-vim.cmd 'lang ja_JP.UTF-8'
+--vim.cmd 'lang ja_JP.UTF-8'
 
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
-
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
-vim.g.python3_host_prog = 'C:\\Users\\asus\\.pyenv\\pyenv-win\\versions\\3.12.4\\python.exe'
-
-vim.o.shell = 'pwsh.exe'
-
-vim.cmd "let &shell = executable('pwsh') ? 'pwsh' : 'powershell'"
-vim.cmd [[let &shellcmdflag = '-NoLogo -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.UTF8Encoding]::new();$PSDefaultParameterValues[''Out-File:Encoding'']=''utf8'';Remove-Alias -Force -ErrorAction SilentlyContinue tee;']]
-vim.cmd [[let &shellredir = '2>&1 | %%{ "$_" } | Out-File %s; exit $LastExitCode']]
-vim.cmd [[let &shellpipe  = '2>&1 | %%{ "$_" } | tee %s; exit $LastExitCode']]
-vim.cmd 'set shellquote= shellxquote='
+vim.cmd "let g:node_host_prog='~/.nvm/versions/node/v18.20.4/lib/node_modules/'"
+--vim.g.python3_host_prog = 'C:\\Users\\asus\\.pyenv\\pyenv-win\\versions\\3.12.4\\python.exe'
+--
+--vim.o.shell = 'pwsh.exe'
+--
+--vim.cmd "let &shell = executable('pwsh') ? 'pwsh' : 'powershell'"
+--vim.cmd [[let &shellcmdflag = '-NoLogo -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.UTF8Encoding]::new();$PSDefaultParameterValues[''Out-File:Encoding'']=''utf8'';Remove-Alias -Force -ErrorAction SilentlyContinue tee;']]
+--vim.cmd [[let &shellredir = '2>&1 | %%{ "$_" } | Out-File %s; exit $LastExitCode']]
+--vim.cmd [[let &shellpipe  = '2>&1 | %%{ "$_" } | tee %s; exit $LastExitCode']]
+--vim.cmd 'set shellquote= shellxquote='
 function _G.set_terminal_keymaps()
   local opts = { buffer = 0 }
   vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
@@ -169,16 +171,7 @@ require('lazy').setup({
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
   'skywind3000/asyncrun.vim',
-  -- 'anuvyklack/hydra.nvim',
 
-  -- 'jay-babu/mason-nvim-dap.nvim',
-  -- config = function()
-  --   require('mason-nvim-dap').setup { ensure_installed = { 'chrome', 'node2' } }
-  -- end,
-  -- 'theHamsta/nvim-dap-virtual-text',
-  -- 'rcarriga/nvim-dap-ui',
-  -- --    'nvim-telescope/telescope-dap.nvim',
-  -- 'rcarriga/cmp-dap',
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
   -- keys can be used to configure plugin behavior/loading/etc.
@@ -202,23 +195,12 @@ require('lazy').setup({
       version = '*',
       config = function()
         require('toggleterm').setup {
+          lazy = true,
           open_mapping = { [[<c-\>]], [[<c-¥>]] },
         }
       end,
     },
   },
-  --  'MunifTanjim/nui.nvim',
-  --  {
-  --    'VonHeikemen/fine-cmdline.nvim',
-  --    config = function()
-  --      require('fine-cmdline').setup {
-  --        cmdline = {
-  --          prompt = ':',
-  --        },
-  --      }
-  --      vim.api.nvim_set_keymap('n', '<CR>', '<cmd>FineCmdline<CR>AsyncRun ', { noremap = true })
-  --    end,
-  --  },
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
   --    require('gitsigns').setup({ ... })
@@ -227,6 +209,7 @@ require('lazy').setup({
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
+      lazy = true,
       signs = {
         add = { text = '+' },
         change = { text = '~' },
@@ -573,7 +556,9 @@ require('lazy').setup({
       --    :Mason
       --
       --  You can press `g?` for help in this menu.
-      require('mason').setup()
+      require('mason').setup {
+        lazy = true,
+      }
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
