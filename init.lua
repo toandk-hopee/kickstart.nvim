@@ -94,10 +94,11 @@ vim.g.maplocalleader = ' '
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
--- [[ Setting options ]]
--- See `:help vim.opt`
--- NOTE: You can change these options as you wish!
---  For more options, you can see `:help option-list`
+vim.g.python3_host_prog = 'C:\\Users\\asus\\.pyenv\\pyenv-win\\versions\\3.12.4\\python.exe'
+-- [[ setting options ]]
+-- see `:help vim.opt`
+-- note: you can change these options as you wish!
+--  for more options, you can see `:help option-list`
 
 -- Make line numbers default
 vim.opt.number = true
@@ -239,16 +240,23 @@ require('lazy').setup({
   --
   -- Use `opts = {}` to force a plugin to be loaded.
   --
-  --  'vim-denops/denops.vim',
-  --  {
-  --    'lambdalisue/kensaku.vim',
-  --    {
-  --      'lambdalisue/kensaku-search.vim',
-  --      config = function()
-  --        vim.api.nvim_set_keymap('c', '<CR>', '<Plug>(kensaku-search-replace)<CR>', { noremap = true, silent = true })
-  --      end,
-  --    },
-  --  },
+  'vim-denops/denops.vim',
+  {
+    'lambdalisue/kensaku.vim',
+    {
+      'lambdalisue/kensaku-search.vim',
+      config = function()
+        vim.api.nvim_set_keymap('c', '<CR>', '<Plug>(kensaku-search-replace)<CR>', { noremap = true, silent = true })
+      end,
+    },
+  },
+  'MunifTanjim/nui.nvim',
+  {
+    'VonHeikemen/fine-cmdline.nvim',
+    config = function()
+      vim.api.nvim_set_keymap('n', '<CR>', '<cmd>FineCmdline<CR>', { noremap = true })
+    end,
+  },
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
   --    require('gitsigns').setup({ ... })
@@ -485,6 +493,12 @@ require('lazy').setup({
           ['language_server_psalm.enabled'] = false,
         },
       }
+
+      require('lspconfig').gopls.setup {
+        root_dir = function(_)
+          return vim.loop.cwd()
+        end,
+      }
       -- Brief aside: **What is LSP?**
       --
       -- LSP is an initialism you've probably heard, but might not understand what it is.
@@ -622,7 +636,7 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         -- clangd = {},
-        -- gopls = {},
+        gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -908,10 +922,10 @@ require('lazy').setup({
         'query',
         'vim',
         'vimdoc',
-        'php',
-        'blade',
+        --'php',
+        --'blade',
         'javascript',
-        'php_only',
+        --'php_only',
       },
       -- Autoinstall languages that are not installed
       auto_install = true,
@@ -928,22 +942,22 @@ require('lazy').setup({
       -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
       local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
       ---@diagnostic disable-next-line: missing-fields
-      parser_config.blade = {
-        install_info = {
-          url = 'https://github.com/EmranMR/tree-sitter-blade',
-          files = { 'src/parser.c' },
-          branch = 'main',
-          generate_requires_npm = true,
-          requires_generate_from_grammar = true,
-        },
-        filetype = 'blade',
-      }
-
-      vim.filetype.add {
-        pattern = {
-          ['.*%.blade%.php'] = 'blade',
-        },
-      }
+      --      parser_config.blade = {
+      --        install_info = {
+      --          url = 'https://github.com/EmranMR/tree-sitter-blade',
+      --          files = { 'src/parser.c' },
+      --          branch = 'main',
+      --          generate_requires_npm = true,
+      --          requires_generate_from_grammar = true,
+      --        },
+      --        filetype = 'blade',
+      --      }
+      --
+      --      vim.filetype.add {
+      --        pattern = {
+      --          ['.*%.blade%.php'] = 'blade',
+      --        },
+      --      }
 
       require('nvim-treesitter.configs').setup(opts)
 
