@@ -8,6 +8,7 @@ vim.g.maplocalleader = ' '
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.g.loaded_matchparen = 1
+vim.loader.enable()
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 vim.cmd "let g:node_host_prog='~/.nvm/versions/node/v18.20.4/lib/node_modules/'"
@@ -197,6 +198,16 @@ require('lazy').setup({
     config = function()
       --      vim.g.VM_leader = "|"
     end,
+  },
+  {
+    'amitds1997/remote-nvim.nvim',
+    version = '*', -- Pin to GitHub releases
+    dependencies = {
+      'nvim-lua/plenary.nvim', -- For standard functions
+      'MunifTanjim/nui.nvim', -- To build the plugin UI
+      'nvim-telescope/telescope.nvim', -- For picking b/w different remote methods
+    },
+    config = true,
   },
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
