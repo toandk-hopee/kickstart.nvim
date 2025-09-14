@@ -1,1 +1,1 @@
-vim.g.supermaven = false
+vim.g.supermaven = true

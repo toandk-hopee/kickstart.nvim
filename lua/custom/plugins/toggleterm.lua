@@ -8,6 +8,7 @@ return {
     require('toggleterm').setup {
       lazy = true,
       open_mapping = { [[<c-t>]], [[<c-¥>]] },
+      -- shell = "bash",
       on_stdout = function(t, job, data, name)
         local efm = vim.opt.errorformat._value
         if t.id == run_term_id then

@@ -10,6 +10,13 @@ vim.g.loaded_netrwPlugin = 1
 vim.g.loaded_matchparen = 1
 vim.deprecate = function() end
 
+vim.opt.title = true
+vim.opt.titlelen = 0 -- do not shorten title
+vim.opt.titlestring = '%t%( %M%)%( (%{expand("%:~:h")})%)%a'
+
+vim.opt.foldenable = false
+vim.opt.foldlevel = 20
+
 -- vim.o.background = 'light'
 vim.loader.enable()
 -- Set to true if you have a Nerd Font installed and selected in the terminal
@@ -153,12 +160,12 @@ vim.keymap.set('n', '-', '<cmd>Oil<CR>')
 
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
---  See `:help vim.highlight.on_yank()`
+--  See `:help vim.hl.on_yank()`
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
-    vim.highlight.on_yank()
+    vim.hl.on_yank()
   end,
 })
 
@@ -186,11 +193,11 @@ vim.opt.rtp:prepend(lazypath)
 --
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup {
-  require 'kickstart.plugins.lsp',
-  require 'kickstart.plugins.telescope',
-  require 'kickstart.plugins.tree-sitter',
-  require 'kickstart.plugins.format',
-  require 'kickstart.plugins.toggleterm',
+  require 'custom.plugins.lsp',
+  require 'custom.plugins.telescope',
+  require 'custom.plugins.tree-sitter',
+  require 'custom.plugins.format',
+  require 'custom.plugins.toggleterm',
   -- {
   --   'stevearc/aerial.nvim',
   --   config = function()
@@ -225,6 +232,9 @@ require('lazy').setup {
         lookup_parents = false, -- Lookup config files in parent directories
       }
     end,
+  },
+  {
+    'pechorin/any-jump.vim',
   },
   {
     'romus204/referencer.nvim',
@@ -312,20 +322,16 @@ require('lazy').setup {
   -- },
   {
     'supermaven-inc/supermaven-nvim',
-    config = function()
-      -- only run setup if the current folder has .supermaven
-      require('supermaven-nvim').setup {
-        keymaps = {
-          accept_suggestion = '<C-j>',
-          clear_suggestion = '<C-]>',
-          accept_word = '<C-\\>',
-        },
-        condition = function()
-          vim.notify(vim.inspect(vim.g.supermaven))
-          return vim.g.supermaven ~= true
-        end,
-      }
-    end,
+    opts = {
+      keymaps = {
+        accept_suggestion = nil, -- handled by nvim-cmp / blink.cmp
+      },
+      disable_inline_completion = vim.g.ai_cmp,
+      ignore_filetypes = { 'bigfile', 'snacks_input', 'snacks_notif' },
+      condition = function()
+        return vim.g.supermaven ~= true
+      end,
+    },
   },
   -- { 'Civitasv/cmake-tools.nvim', opts = {} },
   { 'vim-denops/denops.vim' },
@@ -436,10 +442,10 @@ require('lazy').setup {
     -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
     lazy = false,
   },
-  require 'kickstart.plugins.debug',
-  require 'kickstart.plugins.indent_line',
-  require 'kickstart.plugins.lint',
-  require 'kickstart.plugins.autopairs',
+  require 'custom.plugins.debug',
+  require 'custom.plugins.indent_line',
+  require 'custom.plugins.lint',
+  require 'custom.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 }
